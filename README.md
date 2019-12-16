@@ -122,7 +122,3 @@ https://github.com/stanislawbartkowski/migrawk/blob/master/proc.sh
 The function is shared by both bash scripts. Executes the awk transformation script and the result is executed by DB2.<br>
 
 Additional feature: if ICONV variable is set then before the transformation *iconv* Linux utility is executed to change the MS SQL script character encoding.
-
-### Additional
-
-Both *run.sh* and *runi.sh* can be modified according to needs.

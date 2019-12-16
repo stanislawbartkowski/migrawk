@@ -17,6 +17,8 @@ Several simple and useful bash/awk scripts to migrate tables and data from MS SQ
 
 ### CREATE TABLE modification, dll.awk
 
+https://github.com/stanislawbartkowski/migrawk/blob/master/ddl.awk
+
 Transforms MS SQL table definition into DB2 suported format.<br>
 Example, source MSSQL table<br>
 ```sql
@@ -49,7 +51,9 @@ Tranformation:
 
 ### INSERT clause, insert.awk
 
-Tranforms sequence of INSERT in MS SQL format into DB2 supported syntax.
+https://github.com/stanislawbartkowski/migrawk/blob/master/insert.awk
+
+Transforms sequence of INSERT in MS SQL format into DB2 supported syntax.
 Sample MS SQL input.
 ```SQL
 INSERT [dbo].[Codigos] ([First_name], [Last_name], [Number_of_registrations], [Comment]) VALUES (N'Velocidad', N'Velocidad', 1, N'dam/h')
@@ -65,12 +69,13 @@ Transformation:
 * Removes \[dbo\] and all \[ and \] characters
 * Inserts INTO keyword
 * Add semicolon (;) at the end
-
+* Removes all stuff outside INSERT command
 
 ## Prerequisites
 
 * DB2 instance and database up and running
 * DB2 command line parameter should be installed
+* Target DB2 database should be catalogued
 
 ## Installation
 
@@ -80,10 +85,44 @@ Clone repository
 > cd migrawk<br>
 > cp templates/* .<br>
 
-Modify source.rc, run.sh and run1.sh according to environment.
+Modify source.rc, run.sh and run1.sh adjusting then to your needs.
 
-### Configuration, source.rc
+## Configuration, source.rc
 
+https://github.com/stanislawbartkowski/migrawk/blob/master/templates/source.rc
 
+| Parameter  | Description | Sample value
+| ------------- | ------------- | -------- |
+| DATABASE  | DB2 database name  | DB
+| USER  | DB user name  | db2inst1
+| PASSWORD | DB2 user password | db2inst1
+| SCRIPTFILE | MS SQL script containing CREATE TABLE command, used by run.sh script | 
+| DIRFILE | Directory containg MSSQL scripts with INSERT command, used by runi.sh |
+| LIST | List of files in DRIFILE separated by comma (,) user by runi.sh
 
+DATABASE, USER and PASSWORD command is used to set up DB2 conenction.<br>
+> db2 connect to $DATABASE user $USER using $PASSWORD<br>
 
+## Execution
+
+### run.sh
+https://github.com/stanislawbartkowski/migrawk/blob/master/templates/run.sh
+
+run.sh script is the wrapper around awk ddl.awk file. The script reads $SCRIPTFILE, transforms using ddl.awk and load the result directly to DB2 database.
+
+### runi.sh
+https://github.com/stanislawbartkowski/migrawk/blob/master/templates/runi.sh
+
+runi.sh script is the wrapper around insert.awl file. The script reads a list of files from $LIST in the $DIRFILE, transforms using insert.awk file and executes the result using DB2 connection.
+
+### transformdb2 function
+
+https://github.com/stanislawbartkowski/migrawk/blob/master/proc.sh
+
+The function is shared by both bash scripts. Executes the awk transformation script and the result is executed by DB2.<br>
+
+Additional feature: if ICONV variable is set then before the transformation *iconv* Linux utility is executed to change the MS SQL script character encoding.
+
+### Additional
+
+Both *run.sh* and *runi.sh* can be modified according to needs.

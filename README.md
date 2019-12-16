@@ -100,7 +100,7 @@ https://github.com/stanislawbartkowski/migrawk/blob/master/templates/source.rc
 | DIRFILE | Directory containg MSSQL scripts with INSERT command, used by runi.sh |
 | LIST | List of files in DRIFILE separated by comma (,) user by runi.sh
 
-DATABASE, USER and PASSWORD command is used to set up DB2 conenction.<br>
+DATABASE, USER and PASSWORD command is used to set up DB2 connection.<br>
 > db2 connect to $DATABASE user $USER using $PASSWORD<br>
 
 ## Execution

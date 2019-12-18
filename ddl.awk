@@ -3,7 +3,8 @@
 BEGIN {
     insidecreate = 0;
     printline = 0;
-    MAX = 8000;
+    MAX = 8148;
+    CREATECLAUSE = " ORGANIZE BY COLUMN ";
 }
 
 function closeonly(l) {
@@ -12,7 +13,7 @@ function closeonly(l) {
 }
 
 function createdrop(l) {
-    return gensub(/\(/,";","g","DROP TABLE " clearline(l));
+    return gensub(/\(/," IF EXISTS;","g","DROP TABLE " clearline(l));
 }
 
 function replacemax(l) {
@@ -31,7 +32,7 @@ function replacemax(l) {
     printline = 1;
     if (closeonly(line)) {
         insidecreate = 0;
-        outline(");");
+        outline(")"CREATECLAUSE";");
         line = "";
     }
   }

@@ -1,2 +1,4 @@
 /run*.sh
 /source.rc
+/nohup.out
+/l

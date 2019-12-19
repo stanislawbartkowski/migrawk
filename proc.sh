@@ -4,9 +4,19 @@ transformdb2() {
     local fname="$1"
     local awkscript="$2"    
     if [ -z "$ICONV" ]; then 
-       dos2unix <"$fname" | awk -f $awkscript | db2 -tv; 
+       dos2unix <"$fname" | awk -f $awkscript  -v INCLUDEONLY="$INCLUDEONLY" | db2 -tv; 
     else 
-       iconv -f $ICONV "$fname" | dos2unix | awk -f $awkscript | db2 -tv;
+       iconv -f $ICONV "$fname" | dos2unix | awk -f $awkscript -v INCLUDEONLY="$INCLUDEONLY" | db2 -tv;
     fi
     db2 terminate
+}
+
+testtransform() {
+    local fname="$1"
+    local awkscript="$2"    
+    if [ -z "$ICONV" ]; then 
+       dos2unix <"$fname" | awk -f $awkscript  -v INCLUDEONLY="$INCLUDEONLY"; 
+    else 
+       iconv -f $ICONV "$fname" | dos2unix | awk -f $awkscript  -v INCLUDEONLY="$INCLUDEONLY";
+    fi
 }

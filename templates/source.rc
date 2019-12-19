@@ -3,6 +3,8 @@ USER=db2inst1
 PASSWORD=db2inst1
 
 SCRIPTFILE="sample/ms.sql"
+# list of tables to be included, in capital letters and terminated by ~, including the last name
+#INCLUDEONLY="TABLE1~TABLE2~TABLE3~"
 
 DIRFILE="sample/ms"
 LIST='Inster1.sql,Insert2.txt,Insert3.sql,Insert4.sql'

@@ -12,8 +12,19 @@ function closeonly(l) {
   return 0;
 }
 
-function createdrop(l) {
-    return gensub(/\(/," IF EXISTS;","g","DROP TABLE " clearline(l));
+function gettablename(l) {
+  taname = clearline(l);
+  return gensub(/\(/,"","g",taname);
+}
+
+function includetable(t) {
+   if (length(INCLUDEONLY) == 0) return 1;
+   return (INCLUDEONLY ~ toupper(t)"\~");
+}
+
+function createdrop(taname) {
+#    return gensub(/\(/," IF EXISTS;","g","DROP TABLE " clearline(l));
+   return "DROP TABLE "taname" IF EXISTS;";
 }
 
 function replacemax(l) {
@@ -21,8 +32,11 @@ function replacemax(l) {
 }
 
 /[Cc][Rr][Ee][Aa][Tt][Ee]\ +[Tt][Aa][Bb][Ll][Ee]/ {
-    outline(createdrop($3));
-    insidecreate = 1;
+    tablename = gettablename($3);
+    if (includetable(tablename)) {
+      outline(createdrop(tablename));
+      insidecreate = 1;
+    }
 }    
 
 {
